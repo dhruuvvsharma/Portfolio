@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dhruv Kandwal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08080d;
+    --surface:rgba(255,255,255,0.045);
+    --surface-strong:rgba(255,255,255,0.07);
+    --border:rgba(255,255,255,0.09);
+    --text:#eceaf5;
+    --muted:#9795ab;
+    --blue:#5b8cff;
+    --violet:#a06bff;
+    --coral:#ff7c8a;
+    --font-display:'Sora', sans-serif;
+    --font-body:'Inter', sans-serif;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    overflow-x:hidden;
+    line-height:1.6;
+  }
+
+  ::selection{background:var(--violet);color:#fff;}
+
+  .galaxy{
+    position:fixed;
+    inset:0;
+    z-index:0;
+    overflow:hidden;
+    pointer-events:none;
+  }
+  .blob{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(90px);
+    opacity:0.55;
+    will-change:transform;
+  }
+  .blob.b1{
+    width:520px;height:520px;
+    background:radial-gradient(circle at 30% 30%, var(--blue), transparent 70%);
+    top:-140px; left:-120px;
+    animation:drift1 26s ease-in-out infinite;
+  }
+  .blob.b2{
+    width:480px;height:480px;
+    background:radial-gradient(circle at 60% 40%, var(--violet), transparent 70%);
+    top:20%; right:-160px;
+    animation:drift2 32s ease-in-out infinite;
+  }
+  .blob.b3{
+    width:420px;height:420px;
+    background:radial-gradient(circle at 50% 50%, var(--coral), transparent 70%);
+    bottom:-160px; left:20%;
+    animation:drift3 28s ease-in-out infinite;
+  }
+  @keyframes drift1{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(60px,80px) scale(1.15);}
+  }
+  @keyframes drift2{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(-70px,50px) scale(1.1);}
+  }
+  @keyframes drift3{
+    0%,100%{transform:translate(0,0) scale(1);}
+    50%{transform:translate(50px,-60px) scale(1.2);}
+  }
+  #stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+  .wrap{position:relative;z-index:1;max-width:1040px;margin:0 auto;padding:0 28px;}
+
+  nav{
+    position:sticky;top:0;z-index:10;
+    backdrop-filter:blur(16px);
+    background:rgba(8,8,13,0.6);
+    border-bottom:1px solid var(--border);
+  }
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;}
+  .brand{font-family:var(--font-display);font-weight:700;font-size:19px;letter-spacing:0.2px;}
+  .navlinks{display:flex;gap:32px;list-style:none;}
+  .navlinks a{color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;transition:color 0.25s;}
+  .navlinks a:hover{color:var(--text);}
+
+  section{position:relative;z-index:1;}
+
+  .hero{
+    padding:140px 0 100px;
+    text-align:left;
+  }
+  .hero-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:7px 16px;
+    border:1px solid var(--border);
+    border-radius:999px;
+    background:var(--surface);
+    font-size:13px;color:var(--muted);
+    margin-bottom:28px;
+    opacity:0;
+    animation:rise 0.8s ease forwards;
+  }
+  .dot{width:7px;height:7px;border-radius:50%;background:#5be29b;box-shadow:0 0 8px #5be29b;}
+
+  .hero h1{
+    font-family:var(--font-display);
+    font-size:clamp(38px, 6vw, 64px);
+    font-weight:700;
+    line-height:1.08;
+    max-width:780px;
+    opacity:0;
+    animation:rise 0.9s ease 0.1s forwards;
+  }
+  .hero .gradient-word{
+    background:linear-gradient(90deg,var(--blue),var(--violet),var(--coral));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .hero p.lede{
+    margin-top:22px;
+    max-width:560px;
+    color:var(--muted);
+    font-size:18px;
+    opacity:0;
+    animation:rise 0.9s ease 0.25s forwards;
+  }
+  .hero .quote{
+    margin-top:30px;
+    font-family:var(--font-display);
+    font-size:17px;
+    font-weight:500;
+    color:var(--text);
+    border-left:2px solid var(--violet);
+    padding-left:18px;
+    max-width:520px;
+    opacity:0;
+    animation:rise 0.9s ease 0.4s forwards;
+  }
+  .hero-cta{
+    margin-top:40px;
+    display:flex;gap:14px;flex-wrap:wrap;
+    opacity:0;
+    animation:rise 0.9s ease 0.55s forwards;
+  }
+  @keyframes rise{
+    from{opacity:0;transform:translateY(14px);}
+    to{opacity:1;transform:translateY(0);}
+  }
+
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:12px 22px;
+    border-radius:12px;
+    font-family:var(--font-body);
+    font-weight:600;font-size:14.5px;
+    text-decoration:none;
+    transition:transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    cursor:pointer;
+    border:1px solid transparent;
+  }
+  .btn.primary{
+    background:linear-gradient(90deg,var(--blue),var(--violet));
+    color:#fff;
+  }
+  .btn.primary:hover{transform:translateY(-2px);box-shadow:0 10px 30px -8px rgba(160,107,255,0.55);}
+  .btn.ghost{
+    background:var(--surface);
+    border:1px solid var(--border);
+    color:var(--text);
+  }
+  .btn.ghost:hover{background:var(--surface-strong);transform:translateY(-2px);}
+  .btn.disabled{
+    background:rgba(255,255,255,0.03);
+    border:1px dashed var(--border);
+    color:var(--muted);
+    cursor:default;
+  }
+
+  .section-head{margin-bottom:44px;max-width:600px;}
+  .section-head h2{
+    font-family:var(--font-display);
+    font-size:clamp(26px,3.4vw,36px);
+    font-weight:700;
+  }
+  .section-head p{color:var(--muted);margin-top:12px;font-size:16px;}
+
+  section#about{padding:100px 0;}
+  .about-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:start;}
+  .about-grid p{color:var(--muted);font-size:16px;margin-bottom:16px;max-width:480px;}
+  .trait-list{display:flex;flex-direction:column;gap:16px;}
+  .trait{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:18px 20px;
+    font-size:15px;
+    color:var(--text);
+    transition:border-color 0.25s, background 0.25s;
+  }
+  .trait:hover{background:var(--surface-strong);border-color:rgba(255,255,255,0.16);}
+  .trait span{display:block;color:var(--muted);font-size:13px;margin-top:4px;}
+
+  @media (max-width:760px){
+    .about-grid{grid-template-columns:1fr;}
+  }
+
+  section#projects{padding:60px 0 100px;}
+  .project-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:36px;
+    margin-bottom:28px;
+    position:relative;
+    overflow:hidden;
+    transition:transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  .project-card::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:radial-gradient(600px circle at var(--mx,50%) var(--my,0%), rgba(160,107,255,0.10), transparent 60%);
+    opacity:0;
+    transition:opacity 0.3s;
+    pointer-events:none;
+  }
+  .project-card:hover::before{opacity:1;}
+  .project-card:hover{
+    border-color:rgba(255,255,255,0.16);
+    box-shadow:0 20px 60px -30px rgba(91,140,255,0.35);
+  }
+  .project-top{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;flex-wrap:wrap;}
+  .project-title{font-family:var(--font-display);font-size:23px;font-weight:700;}
+  .project-tag{
+    font-size:12.5px;
+    color:var(--muted);
+    background:rgba(255,255,255,0.05);
+    border:1px solid var(--border);
+    padding:5px 12px;
+    border-radius:999px;
+  }
+  .project-block{margin-top:18px;}
+  .project-block h4{
+    font-size:13px;
+    color:var(--muted);
+    font-weight:600;
+    margin-bottom:6px;
+  }
+  .project-block p{font-size:15.5px;color:var(--text);opacity:0.92;max-width:640px;}
+  .project-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;}
+  .hint{font-size:12.5px;color:var(--muted);margin-top:10px;}
+
+  .next-card{
+    border:1px dashed var(--border);
+    border-radius:24px;
+    padding:32px 36px;
+    display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;
+    background:rgba(255,255,255,0.02);
+  }
+  .next-card h3{font-family:var(--font-display);font-size:19px;font-weight:600;}
+  .next-card p{color:var(--muted);font-size:14.5px;margin-top:6px;}
+
+  section#contact{padding:80px 0 60px;}
+  .contact-card{
+    background:linear-gradient(160deg, rgba(91,140,255,0.10), rgba(255,124,138,0.06));
+    border:1px solid var(--border);
+    border-radius:28px;
+    padding:52px;
+    text-align:center;
+  }
+  .contact-card h2{
+    font-family:var(--font-display);
+    font-size:clamp(26px,3.6vw,38px);
+    font-weight:700;
+    max-width:560px;
+    margin:0 auto 14px;
+  }
+  .contact-card p{color:var(--muted);max-width:460px;margin:0 auto;}
+  .social-row{
+    display:flex;justify-content:center;gap:14px;flex-wrap:wrap;
+    margin-top:34px;
+  }
+  .social-pill{
+    display:flex;align-items:center;gap:9px;
+    padding:11px 18px;
+    border-radius:12px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    text-decoration:none;
+    color:var(--text);
+    font-size:14.5px;
+    font-weight:500;
+    transition:transform 0.25s, background 0.25s;
+  }
+  .social-pill:hover{transform:translateY(-2px);background:var(--surface-strong);}
+  .social-pill svg{width:16px;height:16px;flex-shrink:0;}
+
+  footer{
+    position:relative;z-index:1;
+    text-align:center;
+    padding:36px 0 50px;
+    color:var(--muted);
+    font-size:13.5px;
+  }
+  footer .quote{
+    font-family:var(--font-display);
+    font-size:14px;
+    color:var(--text);
+    margin-bottom:10px;
+    opacity:0.85;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .blob{animation:none;}
+    .hero-badge,.hero h1,.hero p.lede,.hero .quote,.hero-cta{animation:none;opacity:1;}
+  }
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--blue);
+    outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="galaxy">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+<canvas id="stars"></canvas>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">Dhruv Kandwal</div>
+    <ul class="navlinks">
+      <li><a href="#about">About</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-badge"><span class="dot"></span> Open to Work</div>
+    <h1>Hi, I'm <span class="gradient-word">Dhruv</span>.</h1>
+    <p class="lede">A B.Tech CSE student focused on data science, machine learning and the systems that carry a model into production.</p>
+    <p class="quote">"A model isn't finished when it's accurate. It's finished when it's live."</p>
+    <div class="hero-cta">
+      <a class="btn primary" href="#projects">See my projects</a>
+      <a class="btn ghost" href="#contact">Get in touch</a>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>About me</h2>
+    </div>
+    <div class="about-grid">
+      <div>
+        <p>I like picking apart how new technologies actually work rather than just using them. Right now that means going deep on the core data science stack, and GenAI and agentic AI are next on the list.</p>
+        <p>I enjoy meeting new people and hearing perspectives that differ from mine. I try to stay skeptical of easy answers while staying curious enough to keep asking questions, in code and outside it.</p>
+        <p>Away from the screen, I read philosophy. It's a slower kind of debugging, mostly of assumptions. My current favorite is <a href="https://en.wikipedia.org/wiki/Sapiens:_A_Brief_History_of_Humankind" target="_blank" rel="noopener" style="color:var(--text);text-decoration:underline;text-underline-offset:3px;">Sapiens: A Brief History of Humankind</a> by Yuval Noah Harari.</p>
+      </div>
+      <div class="trait-list">
+        <div class="trait">Exploring GenAI and agentic AI<span>next technical focus after the core DS stack</span></div>
+        <div class="trait">Skeptical by default<span>I check claims before I trust them, including my own</span></div>
+        <div class="trait">Curious about people<span>good conversations change how I think</span></div>
+        <div class="trait">Reads philosophy<span>currently rereading Sapiens by Yuval Noah Harari</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Projects</h2>
+      <p>Two shipped end to end, with more on the way.</p>
+    </div>
+
+    <div class="project-card" data-tilt>
+      <div class="project-top">
+        <div class="project-title">Black Friday Sales Prediction</div>
+        <div class="project-tag">Live</div>
+      </div>
+      <div class="project-block">
+        <h4>Problem</h4>
+        <p>Retailers need to estimate how much a customer will spend during a high volume sale event, using only basic customer and product attributes, so pricing and inventory decisions aren't guesswork.</p>
+      </div>
+      <div class="project-block">
+        <h4>What it does</h4>
+        <p>An end to end pipeline covering ingestion, feature engineering, model training and tuning across multiple models, landing on a tuned XGBoost regressor. It's containerized with Docker and served through a FastAPI backend and Streamlit UI, with a Power BI dashboard for the business side.</p>
+      </div>
+      <div class="project-links">
+        <a class="btn primary" href="https://black-friday-ui.onrender.com" target="_blank" rel="noopener">Open the app</a>
+        <a class="btn ghost" href="https://black-friday-api-goqu.onrender.com" target="_blank" rel="noopener">Wake up the API</a>
+        <a class="btn ghost" href="https://github.com/dhruuvvsharma/Black-Friday-Sales-Prediction" target="_blank" rel="noopener">View code</a>
+      </div>
+      <p class="hint">Free hosting spins down when idle. Tap "Wake up the API" first, give it a few seconds, then open the app.</p>
+    </div>
+
+    <div class="project-card" data-tilt>
+      <div class="project-top">
+        <div class="project-title">NOX: Voice AI Assistant</div>
+        <div class="project-tag">In progress</div>
+      </div>
+      <div class="project-block">
+        <h4>Problem</h4>
+        <p>Most personal assistants either need constant typing or feel clunky to talk to. NOX is my attempt at a voice first assistant that listens, understands intent and responds naturally.</p>
+      </div>
+      <div class="project-block">
+        <h4>What it does</h4>
+        <p>Wakes up on a wake word and takes it from there. Under the hood it's an ML based intent classifier, not a plain if else rule ladder, with an LLM as a fallback for anything it doesn't recognize. It can open local apps like Spotify, Notepad, your browser and VS Code, search the web for you, play a song on YouTube on request, and pull specific facts from Wikipedia when you ask.</p>
+      </div>
+      <div class="project-links">
+        <a class="btn disabled">Live demo coming soon</a>
+        <a class="btn ghost" href="https://github.com/dhruuvvsharma/nox-ai-assistant" target="_blank" rel="noopener">View code</a>
+      </div>
+    </div>
+
+    <div class="next-card">
+      <div>
+        <h3>More projects landing here soon</h3>
+        <p>GenAI and agentic AI experiments are next in the pipeline.</p>
+      </div>
+      <div class="project-tag">Coming soon</div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-card">
+      <h2>Let's talk data, models or the philosophy behind either.</h2>
+      <p>Reach out through whichever platform you already have open.</p>
+      <div class="social-row">
+        <a class="social-pill" href="https://www.linkedin.com/in/dhruv-kandwal-690b9b340/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.24 8.25h4.5V23h-4.5V8.25zM8.5 8.25h4.31v2.02h.06c.6-1.13 2.06-2.33 4.24-2.33 4.53 0 5.37 2.98 5.37 6.86V23h-4.5v-6.4c0-1.53-.03-3.5-2.13-3.5-2.14 0-2.47 1.67-2.47 3.39V23H8.5V8.25z"/></svg>
+          LinkedIn
+        </a>
+        <a class="social-pill" href="https://github.com/dhruuvvsharma" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .3a12 12 0 00-3.8 23.38c.6.1.83-.26.83-.58v-2.15c-3.34.72-4.04-1.6-4.04-1.6-.55-1.4-1.34-1.76-1.34-1.76-1.1-.75.08-.74.08-.74 1.2.09 1.84 1.24 1.84 1.24 1.08 1.83 2.83 1.3 3.52 1 .1-.79.42-1.3.76-1.6-2.66-.3-5.47-1.34-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0c2.3-1.55 3.3-1.23 3.3-1.23.66 1.66.25 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.6-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0012 .3z"/></svg>
+          GitHub
+        </a>
+        <a class="social-pill" href="https://www.kaggle.com/dhruvloveskaggling" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.3 21.55h-3.2l-5.53-6.62v6.62H6.9V2.4h2.67v11.36l5.24-5.65h3.34l-5.87 6.13z"/></svg>
+          Kaggle
+        </a>
+        <a class="social-pill" href="https://www.instagram.com/bettercalldhhruv" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.7 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.22-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.15-3.22 1.66-4.77 4.92-4.92 1.27-.06 1.65-.07 4.85-.07zM12 0C8.74 0 8.33.01 7.05.07c-4.35.2-6.78 2.62-6.98 6.98C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.35 2.62 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1012 18.16 6.16 6.16 0 0012 5.84zm0 10.16a4 4 0 110-8 4 4 0 010 8zm6.41-10.4a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/></svg>
+          Instagram
+        </a>
+        <a class="social-pill" href="mailto:dhruv.10040@gmail.com">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 4h20v16H2V4zm2 2v.01L12 13l8-6.99V6H4zm16 3.24l-7.42 6.5a1 1 0 01-1.16 0L4 9.24V18h16V9.24z"/></svg>
+          Email
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p class="quote">"A model isn't finished when it's accurate. It's finished when it's live."</p>
+  <p>&copy; 2026 Dhruv Kandwal</p>
+</footer>
+
+<script>
+  const canvas = document.getElementById('stars');
+  const ctx = canvas.getContext('2d');
+  function sizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = document.body.scrollHeight;
+  }
+  function drawStars(){
+    sizeCanvas();
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const count = Math.floor((canvas.width*canvas.height)/9000);
+    for(let i=0;i<count;i++){
+      const x = Math.random()*canvas.width;
+      const y = Math.random()*canvas.height;
+      const r = Math.random()*1.2;
+      ctx.beginPath();
+      ctx.arc(x,y,r,0,Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.5+0.1})`;
+      ctx.fill();
+    }
+  }
+  drawStars();
+  window.addEventListener('resize', drawStars);
+
+  document.querySelectorAll('.project-card').forEach(card=>{
+    card.addEventListener('mousemove', e=>{
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX-rect.left)/rect.width*100)+'%');
+      card.style.setProperty('--my', ((e.clientY-rect.top)/rect.height*100)+'%');
+    });
+  });
+</script>
+
+</body>
+</html>
